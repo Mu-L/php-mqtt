@@ -324,9 +324,9 @@ abstract class BaseClient
         );
     }
 
-    public function ping()
+    public function ping(bool $response = true)
     {
-        return $this->send(['type' => Protocol\Types::PINGREQ]);
+        return $this->send(['type' => Protocol\Types::PINGREQ], $response);
     }
 
     public function close(int $code = ReasonCode::NORMAL_DISCONNECTION, array $properties = []): bool
