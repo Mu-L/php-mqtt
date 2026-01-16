@@ -6,6 +6,7 @@ jobs:
  gitee:
   if: github.repository == 'simps/mqtt'
   runs-on: ubuntu-latest
+  continue-on-error: true
   steps:
    - name: Configure Private Key
      env:
