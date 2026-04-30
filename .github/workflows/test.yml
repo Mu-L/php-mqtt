@@ -58,6 +58,7 @@ jobs:
       - name: Build Swoole
         run: |
           if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
+            sudo apt-get install --reinstall libbrotli-dev
             wget https://github.com/swoole/swoole-src/archive/${SWOOLE_VERSION}.tar.gz -O swoole.tar.gz
             mkdir -p swoole
             tar -xf swoole.tar.gz -C swoole --strip-components=1
