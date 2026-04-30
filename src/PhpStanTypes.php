@@ -41,5 +41,6 @@ final class PhpStanTypes
 {
     private function __construct()
     {
+        // For use with PhpStan only.
     }
 }
