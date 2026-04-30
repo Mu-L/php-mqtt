@@ -40,19 +40,20 @@ class ClientTest extends TestCase
     {
         $topic = 'simps-mqtt/test/base64';
         $base64 = base64_encode(file_get_contents(TESTS_DIR . '/files/wechat.jpg'));
-        $config = getTestConnectConfig();
-        $config->setSwooleConfig(['read_timeout' => 10.0]);
-        $client = new MQTTClient('test.mosquitto.org', SIMPS_MQTT_PORT, $config);
+        $client = new MQTTClient(SIMPS_MQTT_REMOTE_HOST, SIMPS_MQTT_PORT, getTestConnectConfig());
         $client->connect(false);
         $client->subscribe([$topic => 0]);
 
         Coroutine::create(function () use ($topic, $base64) {
-            $client = new MQTTClient('test.mosquitto.org', SIMPS_MQTT_PORT, getTestConnectConfig());
+            $client = new MQTTClient(SIMPS_MQTT_REMOTE_HOST, SIMPS_MQTT_PORT, getTestConnectConfig());
             $client->connect();
             $client->publish($topic, $base64);
         });
 
         $buffer = $client->recv();
+        if (empty($buffer)) {
+            $buffer = $client->recv();
+        }
         $this->assertSame(Types::PUBLISH, $buffer['type']);
         $this->assertSame($topic, $buffer['topic']);
         $this->assertSame(strlen($base64), strlen($buffer['message']));
